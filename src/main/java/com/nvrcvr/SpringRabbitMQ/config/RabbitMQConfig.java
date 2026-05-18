@@ -38,28 +38,28 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public DirectExchange orderExchange(){
-        return new DirectExchange("order.exchange");
+    public TopicExchange orderExchange(){
+        return new TopicExchange("order.exchange");
     }
 
     @Bean
-    public Binding orderCreatedBinding(@Qualifier("orderCreatedQueue") Queue orderCreateQueue, DirectExchange orderExchange){
-        return BindingBuilder.bind(orderCreateQueue)
+    public Binding orderCreatedBinding(@Qualifier("orderCreatedQueue") Queue orderCreatedQueue, TopicExchange orderExchange){
+        return BindingBuilder.bind(orderCreatedQueue)
                 .to(orderExchange)
                 .with("order.create");
     }
 
     @Bean
-    public Binding orderCancelBinding(@Qualifier("orderCancelQueue") Queue orderCancelQueue,DirectExchange orderExchange){
+    public Binding orderCancelBinding(@Qualifier("orderCancelQueue") Queue orderCancelQueue,TopicExchange orderExchange){
         return BindingBuilder.bind(orderCancelQueue)
                 .to(orderExchange)
                 .with("order.cancel");
     }
     @Bean
-    public Binding orderGenericBinding(@Qualifier("orderGenericQueue") Queue orderGenericQueue,DirectExchange orderExchange){
+    public Binding orderGenericBinding(@Qualifier("orderGenericQueue") Queue orderGenericQueue,TopicExchange orderExchange){
         return BindingBuilder.bind(orderGenericQueue)
                 .to(orderExchange)
-                .with("order.generic");
+                .with("order.#");
     }
 
     @Bean
